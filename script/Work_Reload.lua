@@ -2,6 +2,8 @@ local luv = require("luv")
 local world = require("df.game.mgr.world")
 
 local item_handler = { }
+-- 翻牌回城模式
+local finishBackHomeMode = "0"
 
 --------------------------------------------------------------------------特殊功能开头----------------------------------------------------------------------------
 
@@ -98,12 +100,83 @@ local function onExpTimer()
     end
 end
 paodianTimer:start(60000, 60000, onExpTimer)--1分钟后开始执行，随后每1分钟执行一次
+-- 执行分解操作
+local function execDisjoint(user, callee)
+    local q = 0
+    for i = 9, 56, 1 do
+        local info = dpx.item.info(user.cptr, game.ItemSpace.INVENTORY, i)
+        if info then
+            user:Disjoint(game.ItemSpace.INVENTORY, i, callee)
+            if not dpx.item.info(user.cptr, game.ItemSpace.INVENTORY, i) then
+                q = q + 1
+            end
+        end
+    end
+    if q > 0 then
+        user:SendItemSpace(game.ItemSpace.INVENTORY)
+        user:SendNotiPacketMessage(string.format("分解成功， %d件装备已分解", q), 14)
+    else
+        user:SendNotiPacketMessage("分解失败，", 14)
+    end
+end
+-- 使用在线的玩家的分解机分解
+local function disjointWithPlayer(user)
+    --遍历在线玩家
+    for k, v in pairs(online) do
+        local _uid = k
+        if _uid ~= nil and online[_uid] then
+            local _ptr = world.FindUserByAcc(_uid)
+            local _user = game.fac.user(_ptr)
+            local expertObj = _user:GetCurCharacExpertJob()
+            if expertObj ~= nil then
+                execDisjoint(user, _user)
+                break
+            end
+        end
+    end
+end
+-- 使用诺顿的分解机分解
+local function disjointWithNord(user)
+    execDisjoint(user, nil)
+end
+-- 出售装备
+local function sellEquipment(user)
+    local q = 0
+    for i = 9, 56, 1 do
+        local info = dpx.item.info(user.cptr, game.ItemSpace.INVENTORY, i)
+        if info then
+            user:Sell(game.ItemSpace.INVENTORY, i, 1)
+            if not dpx.item.info(user.cptr, game.ItemSpace.INVENTORY, i) then
+                q = q + 1
+            end
+        end
+    end
+    if q > 0 then
+        user:SendItemSpace(game.ItemSpace.INVENTORY)
+        user:SendNotiPacketMessage(string.format("出售成功， %d件装备已出售", q), 14)
+    else
+        user:SendNotiPacketMessage("出售失败，", 14)
+    end
+end
 
 --------------------------------------------------------------------------翻牌回城----------------------------------------------------------------------------
 local function finishBackHome(fnext, type, _party, param)
-    if type == game.GameEventType.PARTY_DUNGEON_FINISH then
+    if type == game.GameEventType.PARTY_DUNGEON_FINISH and finishBackHomeMode ~= "0" then
         fnext()
         local party = game.fac.party(_party)
+        if finishBackHomeMode == "1" then
+        else
+            party:ForEachMember(function(user, pos)
+                if finishBackHomeMode == "2" then
+                    disjointWithNord(user)
+                elseif finishBackHomeMode == "3" then
+                    disjointWithPlayer(user)
+                elseif finishBackHomeMode == "4" then
+                    sellEquipment(user)
+                end
+                return true
+            end)
+        end
         party:ReturnToVillage()
     end
     return fnext()
@@ -279,9 +352,33 @@ local on_input = function(fnext, _user, input)
 		user:SendNotiPacketMessage("功能：城镇坐标  指令：//postwn", 14)
 		user:SendNotiPacketMessage("功能：设置虚弱  指令：//weak", 14)
 		user:SendNotiPacketMessage("功能：复杂指令  指令：//set", 14)
-		user:SendNotiPacketMessage("功能：分解装备【诺顿】  指令：//fj1", 6)
-		user:SendNotiPacketMessage("功能：分解装备【分解机】  指令：//fj2", 6)
+		user:SendNotiPacketMessage("功能：分解装备【诺顿】  指令：//disjoint1", 6)
+		user:SendNotiPacketMessage("功能：分解装备【分解机】  指令：//disjoint2", 6)
+		user:SendNotiPacketMessage("功能：出售装备  指令：//sell", 6)
+        user:SendNotiPacketMessage("功能：翻牌自动回城模式  指令：//finishBackHomeM", 6)
+        user:SendNotiPacketMessage("M的值为0,1,2,3,4", 6)
+        user:SendNotiPacketMessage("//finishBackHome0---关闭翻牌回城", 6)
+        user:SendNotiPacketMessage("//finishBackHome1---打开翻牌回城", 6)
+        user:SendNotiPacketMessage("//finishBackHome2---翻牌回城分解装备(诺顿)", 6)
+        user:SendNotiPacketMessage("//finishBackHome3---翻牌回城分解装备(在线玩家分解机)", 6)
+        user:SendNotiPacketMessage("//finishBackHome4---翻牌回城出售装备", 6)
         user:SendNotiPacketMessage("——————————指令结束——————————", 14)
+    
+    elseif string.match(input, "//finishBackHome") and string.len(input) > 16 then
+        finishBackHomeMode = string.sub(input, 17)
+        if finishBackHomeMode == "0" then
+            user:SendNotiPacketMessage("已关闭翻牌回城", 6)
+        elseif finishBackHomeMode == "1" then
+            user:SendNotiPacketMessage("已打开翻牌回城", 6)
+        elseif finishBackHomeMode == "2" then
+            user:SendNotiPacketMessage("已打开翻牌回城分解装备(诺顿)", 6)
+        elseif finishBackHomeMode == "3" then
+            user:SendNotiPacketMessage("已打开翻牌回城分解装备(在线玩家分解机)", 6)
+        elseif finishBackHomeMode == "4" then
+            user:SendNotiPacketMessage("已打开翻牌回城出售装备", 6)
+        end
+    elseif input == "//sell" then
+        sellEquipment(user)
 
     elseif input == "//myinfo" then
 	    user:SendNotiPacketMessage(string.format("——————————个人信息——————————\n 账号编号： %s\n 角色编号： %s\n 角色姓名： %s\n 角色等级： %s\n 职业编号： %s\n 转职编号： %s\n 副职编号： %s\n 已用疲劳： %s", user:GetAccId(), user:GetCharacNo(), user:GetCharacName(), user:GetCharacLevel(), user:GetCharacJob(), user:GetCharacGrowType(), user:GetCurCharacExpertJobType(), user:GetFatigue()), 14)
@@ -1181,40 +1278,10 @@ local on_input = function(fnext, _user, input)
     end
 
 ----------------------------------------------------------------------------以下是装备分解----------------------------------------------------------------------------
-    elseif input == "//fj1" then
-        local q = 0
-        for i = 9, 56, 1 do
-            local info = dpx.item.info(user.cptr, game.ItemSpace.INVENTORY, i)
-            if info then
-                user:Disjoint(game.ItemSpace.INVENTORY, i, nil)
-                if not dpx.item.info(user.cptr, game.ItemSpace.INVENTORY, i) then
-                    q = q + 1
-                end
-            end
-        end
-        if q > 0 then
-            user:SendItemSpace(game.ItemSpace.INVENTORY)
-            user:SendNotiPacketMessage(string.format("分解成功， %d件装备已分解", q), 14)
-        else
-            user:SendNotiPacketMessage("分解失败，", 14)
-        end
-    elseif input == "//fj2" then
-        local q = 0
-        for i = 9, 56, 1 do
-            local info = dpx.item.info(user.cptr, game.ItemSpace.INVENTORY, i)
-            if info then
-                user:Disjoint(game.ItemSpace.INVENTORY, i, user)
-                if not dpx.item.info(user.cptr, game.ItemSpace.INVENTORY, i) then
-                    q = q + 1
-                end
-            end
-        end
-        if q > 0 then
-            user:SendItemSpace(game.ItemSpace.INVENTORY)
-            user:SendNotiPacketMessage(string.format("分解成功， %d件装备已分解", q), 14)
-        else
-            user:SendNotiPacketMessage("分解失败，", 14)
-        end
+    elseif input == "//disjoint1" then
+        disjointWithNord(user)
+    elseif input == "//disjoint2" then
+        disjointWithPlayer(user)
 
 ----------------------------------------------------------------------------以下是装备跨界----------------------------------------------------------------------------
 	elseif input == "//moveequ" then
