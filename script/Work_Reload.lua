@@ -19,7 +19,8 @@ local function onLogin(_user)
 
     sendPacketMessage(string.format("玩家【%s】上线了", user:GetCharacName()), 14)
     logger.info(string.format("玩家【%s】上线了", user:GetCharacName()))
-    local logFile = io.open("/dp2/script/rizhi.log", "a")  
+    -- local logFile = io.open("/dp2/script/rizhi.log", "a")
+    local logFile = nil  
     if logFile then
         local logMsg = string.format("%s	%d	%s	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), "上线了")
         logFile:write(logMsg)  
@@ -36,7 +37,7 @@ local function onLogout(_user)
 
     sendPacketMessage(string.format("玩家【%s】下线了", user:GetCharacName()), 14)
     logger.info(string.format("玩家【%s】下线了", user:GetCharacName()))
-    local logFile = io.open("/dp2/script/rizhi.log", "a")  
+    local logFile = nil  
     if logFile then
         local logMsg = string.format("%s	%d	%s	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), "下线了")
         logFile:write(logMsg)  
@@ -282,7 +283,7 @@ local function MyUpgrade(fnext, _user, iitem)
 		 	local q = math.random(1, 5) --在1-5中随机一个值
 			if q < 5 then --若随机的值小于5，强化/增幅任然失败
 			    user:SendNotiPacketMessage("精灵的祝福失败，维持失败结果。", 14)
-				local logFile = io.open("/dp2/script/rizhi.log", "a")  
+				local logFile = nil  
    		 	    if logFile then
          	    local logMsg = string.format("%s	%d	%s	精灵祝福失败	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), iitem:has_amplify_ability() and "增幅" or "强化")
          	    logFile:write(logMsg)  
@@ -292,7 +293,7 @@ local function MyUpgrade(fnext, _user, iitem)
          	    iitem:inc_upgrade()
          	    ok = true
 		 	    sendPacketMessage(string.format("—————————精灵的祝福—————————\n 玩家【%s】 在精灵的祝福下 %s成功啦!", user:GetCharacName(), iitem:has_amplify_ability() and "增幅" or "强化"), 15)
-		 	    local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		 	    local logFile = nil  
    		 	        if logFile then
          	        local logMsg = string.format("%s	%d	%s	精灵祝福成功	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), iitem:has_amplify_ability() and "增幅" or "强化")
          	        logFile:write(logMsg)  
@@ -425,7 +426,7 @@ local on_input = function(fnext, _user, input)
         dpx.sqlexec(game.DBType.taiwan_cain, "update charac_info set " .. x .. "=" .. z .. " where charac_no=" .. y .. "")
 
         user:SendNotiPacketMessage(string.format("已更改 玩家【%s】 表【charac_info】 列【%s】 值【%s】 ", y, x, z), 14)
-        local logFile = io.open("/dp2/script/rizhi.log", "a")  
+        local logFile = nil  
             if logFile then
                 local logMsg = string.format("%s	%d	%s	set	玩家%s	表charac_info 列%s 值%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), y, x, z)
                 logFile:write(logMsg)  
@@ -458,7 +459,7 @@ local on_input = function(fnext, _user, input)
         dpx.sqlexec(game.DBType.taiwan_cain, "update charac_stat set " .. x .. "=" .. z .. " where charac_no=" .. y .. "")
 
         user:SendNotiPacketMessage(string.format("已更改 玩家【%s】 表【charac_stat】 列【%s】 值【%s】 ", y, x, z), 14)
-        local logFile = io.open("/dp2/script/rizhi.log", "a")  
+        local logFile = nil  
             if logFile then
                 local logMsg = string.format("%s	%d	%s	set	玩家%s	表charac_stat 列%s 值%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), y, x, z)
                 logFile:write(logMsg)  
@@ -474,7 +475,7 @@ local on_input = function(fnext, _user, input)
         dpx.sqlexec(game.DBType.taiwan_cain, "update member_dungeon set dungeon='2|3,3|3,4|3,5|3,6|3,7|3,8|3,9|3,11|3,12|3,13|3,14|3,15|3,17|3,21|3,22|3,23|3,24|3,25|3,26|3,27|3,31|3,32|3,33|3,34|3,35|3,36|3,37|3,40|3,42|3,43|3,44|3,45|3,50|3,51|3,52|3,53|3,60|3,61|3,65|2,66|1,67|2,70|3,71|3,72|3,73|3,74|3,75|3,76|3,77|3,80|3,81|3,82|3,83|3,84|3,85|3,86|3,87|3,88|3,89|3,90|3,91|2,92|3,93|3,100|3,101|3,102|3,103|3,104|3,110|3,111|3,112|3,140|3,141|3,502|3,511|3,521|3,1000|3,1500|3,1501|3,1502|3,1504|1,1506|3,3506|3,10000|3' where m_id=" .. x .. "")
 
         user:SendNotiPacketMessage(string.format("已开启 账号【%s】 所有副本难度", x), 14)
-        local logFile = io.open("/dp2/script/rizhi.log", "a")  
+        local logFile = nil  
             if logFile then
                 local logMsg = string.format("%s	%d	%s	set	账号%s 所有副本难度\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), x)
                 logFile:write(logMsg)  
@@ -492,7 +493,7 @@ local on_input = function(fnext, _user, input)
         dpx.sqlexec(game.DBType.taiwan_cain, "update charac_tower_despair set last_clear_layer=" .. y .. " where charac_no=" .. x .. "")
 
         user:SendNotiPacketMessage(string.format("已更改 玩家【%s】 表【charac_tower_despair】 列【last_clear_layer】 值【%s】 ", x, y), 14)
-        local logFile = io.open("/dp2/script/rizhi.log", "a")  
+        local logFile = nil  
             if logFile then
                 local logMsg = string.format("%s	%d	%s	set	玩家%s	表charac_tower_despair 列last_clear_layer 值%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), y, x, z)
                 logFile:write(logMsg)  
@@ -521,7 +522,7 @@ local on_input = function(fnext, _user, input)
 
         lastSignInTime[user:GetCharacNo()] = currentTime
 
-        local logFile = io.open("/dp2/script/rizhi.log", "a")  
+        local logFile = nil  
         if logFile then
             local logMsg = string.format("%s	%d	%s	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), "签到成功")
             logFile:write(logMsg)  
@@ -540,7 +541,7 @@ local on_input = function(fnext, _user, input)
 		user:ChargeCera(x)
         user:SendNotiPacketMessage(string.format("已充值%d点券", x), 14)
 		sendPacketMessage(string.format("——————————通报批评—————————-\n 禽兽玩家：【%s】\n 指令充值：【点券】\n 获得数量：【%s】", user:GetCharacName(), x), 15)
-   		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+   		local logFile = nil  
    		if logFile then
            	local logMsg = string.format("%s	%d	%s	指令充值	点券	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), x)
            	logFile:write(logMsg)  
@@ -552,7 +553,7 @@ local on_input = function(fnext, _user, input)
 		user:ChargeCeraPoint(x)
         user:SendNotiPacketMessage(string.format("已充值%d代币", x), 14)
 		sendPacketMessage(string.format("——————————通报批评—————————-\n 禽兽玩家：【%s】\n 指令充值：【代币】\n 获得数量：【%s】", user:GetCharacName(), x), 15)
-   		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+   		local logFile = nil  
    		if logFile then
            	local logMsg = string.format("%s	%d	%s	指令充值	代币	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), x)
            	logFile:write(logMsg)  
@@ -564,7 +565,7 @@ local on_input = function(fnext, _user, input)
 		user:GainWinPoint(x)
         user:SendNotiPacketMessage(string.format("已充值%d胜点", x), 14)
 		sendPacketMessage(string.format("——————————通报批评—————————-\n 禽兽玩家：【%s】\n 指令充值：【胜点】\n 获得数量：【%s】", user:GetCharacName(), x), 15)
-   		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+   		local logFile = nil  
    		if logFile then
            	local logMsg = string.format("%s	%d	%s	指令充值	胜点	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), x)
            	logFile:write(logMsg)  
@@ -576,7 +577,7 @@ local on_input = function(fnext, _user, input)
         dpx.sqlexec(game.DBType.taiwan_cain_2nd, "update skill set remain_sp=remain_sp+" .. x .. " where charac_no=" .. user:GetCharacNo() .. "")
         user:SendNotiPacketMessage(string.format("已充值%d SP，请切换角色以生效", x), 14)
 		sendPacketMessage(string.format("——————————通报批评—————————-\n 禽兽玩家：【%s】\n 指令充值：【SP】\n 获得数量：【%s】", user:GetCharacName(), x), 15)
-   		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+   		local logFile = nil  
    		if logFile then
            	local logMsg = string.format("%s	%d	%s	指令充值	SP	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), x)
            	logFile:write(logMsg)  
@@ -588,7 +589,7 @@ local on_input = function(fnext, _user, input)
 		dpx.sqlexec(game.DBType.taiwan_cain_2nd, "update skill set remain_sfp_1st=remain_sfp_1st+" .. x .. " where charac_no=" .. user:GetCharacNo() .. "")
         user:SendNotiPacketMessage(string.format("已充值%d TP，请切换角色以生效", x), 14)
 		sendPacketMessage(string.format("——————————通报批评—————————-\n 禽兽玩家：【%s】\n 指令充值：【TP】\n 获得数量：【%s】", user:GetCharacName(), x), 15)
-   		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+   		local logFile = nil  
    		if logFile then
            	local logMsg = string.format("%s	%d	%s	指令充值	TP	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), x)
            	logFile:write(logMsg)  
@@ -600,7 +601,7 @@ local on_input = function(fnext, _user, input)
 		dpx.sqlexec(game.DBType.taiwan_cain, "update charac_quest_shop set qp=qp+" .. x .. " where charac_no=" .. user:GetCharacNo() .. "")
         user:SendNotiPacketMessage(string.format("已充值%d QP，请切换角色以生效", x), 14)
 		sendPacketMessage(string.format("——————————通报批评—————————-\n 禽兽玩家：【%s】\n 指令充值：【QP】\n 获得数量：【%s】", user:GetCharacName(), x), 15)
-   		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+   		local logFile = nil  
    		if logFile then
            	local logMsg = string.format("%s	%d	%s	指令充值	QP	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), x)
            	logFile:write(logMsg)  
@@ -652,7 +653,7 @@ local on_input = function(fnext, _user, input)
             end
 				sendPacketMessage(string.format("——————————通报批评—————————-\n 禽兽玩家：【%s】\n 指令获得：【%s】\n 强化等级：【%s】\n 获得数量：【%s】", user:GetCharacName(), id, up, q), 15)
 				--以下是日志记录
-                local logFile = io.open("/dp2/script/rizhi.log", "a")  
+                local logFile = nil  
                 if logFile then
                     local logMsg = string.format("%s	%d	%s	指令发送	%s	强化 %s	数量 %s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), id, up, q)
                     logFile:write(logMsg)  
@@ -668,7 +669,7 @@ local on_input = function(fnext, _user, input)
 				dpx.item.add(user.cptr, id, 1, up)
 				sendPacketMessage(string.format("——————————通报批评—————————-\n 禽兽玩家：【%s】\n 指令获得：【%s】\n 强化等级：【%s】\n 获得数量：【1】", user:GetCharacName(), id, up), 15)
 				--以下是日志记录
-                local logFile = io.open("/dp2/script/rizhi.log", "a")  
+                local logFile = nil  
                 if logFile then
                     local logMsg = string.format("%s	%d	%s	指令发送	%s	强化 %s	数量 1\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), id, up)
                     logFile:write(logMsg)  
@@ -683,7 +684,7 @@ local on_input = function(fnext, _user, input)
 				dpx.item.add(user.cptr, id, count)
 				sendPacketMessage(string.format("——————————通报批评—————————-\n 禽兽玩家：【%s】\n 指令获得：【%s】\n 获得数量：【%s】", user:GetCharacName(), id, count), 15)
 				--以下是日志记录
-                local logFile = io.open("/dp2/script/rizhi.log", "a")  
+                local logFile = nil  
                 if logFile then
                     local logMsg = string.format("%s	%d	%s	指令发送	%s	数量 %s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), id, count)
                     logFile:write(logMsg)  
@@ -696,7 +697,7 @@ local on_input = function(fnext, _user, input)
 				dpx.item.add(user.cptr, id)
 				sendPacketMessage(string.format("——————————通报批评—————————-\n 禽兽玩家：【%s】\n 指令获得：【%s】\n 获得数量：【1】", user:GetCharacName(), id), 15)
 				--以下是日志记录
-                local logFile = io.open("/dp2/script/rizhi.log", "a")  
+                local logFile = nil  
                 if logFile then
                     local logMsg = string.format("%s	%d	%s	指令发送	%s	数量 1\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), id)
                     logFile:write(logMsg)  
@@ -713,7 +714,7 @@ local on_input = function(fnext, _user, input)
 		local x = tonumber(string.sub(input, 8))
         user:SetCharacLevel(x)
         user:SendNotiPacketMessage(string.format("玩家等级设置为： %s级", x), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a") 
+		local logFile = nil 
    			if logFile then
 	          	local logMsg = string.format("%s	%d	%s	指令设置等级	%s级\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), x)
     	       	logFile:write(logMsg)  
@@ -728,7 +729,7 @@ local on_input = function(fnext, _user, input)
 		local q = tonumber(string.sub(input, 7))
         local ok = dpx.quest.accept(user.cptr, q, true)
         user:SendNotiPacketMessage(string.format("已强制接取任务，编号【%s】", q), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
    			if logFile then
           	    local logMsg = string.format("%s	%d	%s	指令接取	任务编号	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), q)
            	    logFile:write(logMsg)  
@@ -763,7 +764,7 @@ local on_input = function(fnext, _user, input)
         if q > 0 then
             quest.update(user.cptr)
             user:SendNotiPacketMessage(string.format(" 已清理%d个任务！", q), 14)
-			local logFile = io.open("/dp2/script/rizhi.log", "a")  
+			local logFile = nil  
    			    if logFile then
           	     	local logMsg = string.format("%s	%d	%s	指令清理	所有任务	%d个\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), q)
            	    	logFile:write(logMsg)  
@@ -792,7 +793,7 @@ local on_input = function(fnext, _user, input)
         if q > 0 then
             quest.update(user.cptr)
             user:SendNotiPacketMessage(string.format(" 已清理%d个主线任务！", q), 14)
-			local logFile = io.open("/dp2/script/rizhi.log", "a")  
+			local logFile = nil  
    			    if logFile then
           	     	local logMsg = string.format("%s	%d	%s	指令清理	主线任务	%d个\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), q)
            	    	logFile:write(logMsg)  
@@ -821,7 +822,7 @@ local on_input = function(fnext, _user, input)
         if q > 0 then
             quest.update(user.cptr)
             user:SendNotiPacketMessage(string.format(" 已清理%d个成就任务！", q), 14)
-			local logFile = io.open("/dp2/script/rizhi.log", "a")  
+			local logFile = nil  
    			    if logFile then
           	     	local logMsg = string.format("%s	%d	%s	指令清理	成就任务	%d个\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), q)
            	    	logFile:write(logMsg)  
@@ -850,7 +851,7 @@ local on_input = function(fnext, _user, input)
         if q > 0 then
             quest.update(user.cptr)
             user:SendNotiPacketMessage(string.format(" 已清理%d个普通任务！", q), 14)
-			local logFile = io.open("/dp2/script/rizhi.log", "a")  
+			local logFile = nil  
    			    if logFile then
           	     	local logMsg = string.format("%s	%d	%s	指令清理	普通任务	%d个\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), q)
            	    	logFile:write(logMsg)  
@@ -879,7 +880,7 @@ local on_input = function(fnext, _user, input)
         if q > 0 then
             quest.update(user.cptr)
             user:SendNotiPacketMessage(string.format(" 已清理%d个每日任务！", q), 14)
-			local logFile = io.open("/dp2/script/rizhi.log", "a")  
+			local logFile = nil  
    			    if logFile then
           	     	local logMsg = string.format("%s	%d	%s	指令清理	每日任务	%d个\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), q)
            	    	logFile:write(logMsg)  
@@ -913,7 +914,7 @@ local on_input = function(fnext, _user, input)
 		if x >=0 and x <= 10 then
         dpx.sqlexec(game.DBType.taiwan_cain, "update charac_info set job=" .. x .. " where charac_no=" .. user:GetCharacNo() .. "")
       	    user:SendNotiPacketMessage(string.format("职业已变更为：【%s】，请切换角色并初始化SP以生效", x), 14)
-        	local logFile = io.open("/dp2/script/rizhi.log", "a")  
+        	local logFile = nil  
             	if logFile then
                 	local logMsg = string.format("%s	%d	%s	指令修改 职业为 %s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), x)
                 	logFile:write(logMsg)  
@@ -942,7 +943,7 @@ local on_input = function(fnext, _user, input)
 		if x >=0 and x <= 5 then
 		user:ChangeGrowType(x, 0)
       	    user:SendNotiPacketMessage(string.format("转职已变更为：【%s】，请切换角色并初始化SP以生效", x), 14)
-        	local logFile = io.open("/dp2/script/rizhi.log", "a")  
+        	local logFile = nil  
             	if logFile then
                 	local logMsg = string.format("%s	%d	%s	指令修改 转职为 %s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), x)
                 	logFile:write(logMsg)  
@@ -960,7 +961,7 @@ local on_input = function(fnext, _user, input)
 		local growType = user:GetCharacGrowType()
         user:ChangeGrowType(growType, 1)
         user:SendNotiPacketMessage("一次觉醒成功", 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
         if logFile then
             local logMsg = string.format("%s	%d	%s	指令觉醒	一觉	%d\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), user:GetCharacNo())
             logFile:write(logMsg)  
@@ -971,7 +972,7 @@ local on_input = function(fnext, _user, input)
 		local growType = user:GetCharacGrowType()
         user:ChangeGrowType(growType-16, 2)
         user:SendNotiPacketMessage("二次觉醒成功", 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
         if logFile then
             local logMsg = string.format("%s	%d	%s	指令觉醒	二觉	%d\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), user:GetCharacNo())
             logFile:write(logMsg)  
@@ -992,7 +993,7 @@ local on_input = function(fnext, _user, input)
 	    local x = tonumber(string.sub(input, 7))
         dpx.sqlexec(game.DBType.taiwan_cain, "update taiwan_cain.pvp_result set pvp_grade=" .. x .. " where charac_no=" .. user:GetCharacNo() .. "")
         user:SendNotiPacketMessage(string.format("设置决斗等级为：%s 请切换角色以生效", x), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
    		if logFile then
             local logMsg = string.format("%s	%d	%s	指令设置	决斗等级	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), x)
             logFile:write(logMsg)  
@@ -1003,7 +1004,7 @@ local on_input = function(fnext, _user, input)
 	    local x = tonumber(string.sub(input, 7))
         dpx.sqlexec(game.DBType.taiwan_cain, "update taiwan_cain.pvp_result set pvp_point=" .. x .. " where charac_no=" .. user:GetCharacNo() .. "")
         user:SendNotiPacketMessage(string.format("设置决斗经验为：%s 请切换角色以生效", x), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
    		if logFile then
             local logMsg = string.format("%s	%d	%s	指令设置	决斗经验	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), x)
             logFile:write(logMsg)  
@@ -1014,7 +1015,7 @@ local on_input = function(fnext, _user, input)
 	    local x = tonumber(string.sub(input, 7))
         dpx.sqlexec(game.DBType.taiwan_cain, "update taiwan_cain.pvp_result set win_point=" .. x .. " where charac_no=" .. user:GetCharacNo() .. "")
         user:SendNotiPacketMessage(string.format("设置决斗胜点为：%s 请切换角色以生效", x), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
    		if logFile then
             local logMsg = string.format("%s	%d	%s	指令设置	决斗胜点	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), x)
             logFile:write(logMsg)  
@@ -1025,7 +1026,7 @@ local on_input = function(fnext, _user, input)
 	    local x = tonumber(string.sub(input, 7))
         dpx.sqlexec(game.DBType.taiwan_cain, "update taiwan_cain.pvp_result set win=" .. x .. " where charac_no=" .. user:GetCharacNo() .. "")
         user:SendNotiPacketMessage(string.format("设置决斗胜场为：%s 请切换角色以生效", x), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
    		if logFile then
             local logMsg = string.format("%s	%d	%s	指令设置	决斗胜场	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), x)
             logFile:write(logMsg)  
@@ -1036,7 +1037,7 @@ local on_input = function(fnext, _user, input)
 	    local x = tonumber(string.sub(input, 7))
         dpx.sqlexec(game.DBType.taiwan_cain, "update taiwan_cain.pvp_result set lose=" .. x .. " where charac_no=" .. user:GetCharacNo() .. "")
         user:SendNotiPacketMessage(string.format("设置决斗败场为：%s 请切换角色以生效", x), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
    		if logFile then
             local logMsg = string.format("%s	%d	%s	指令设置	决斗败场	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), x)
             logFile:write(logMsg)  
@@ -1069,7 +1070,7 @@ local on_input = function(fnext, _user, input)
     if q > 0 then
         user:SendItemSpace(game.ItemSpace.INVENTORY)
         user:SendNotiPacketMessage(string.format("清理成功，%d个装备已清理", q), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
    		    if logFile then
                	local logMsg = string.format("%s	%d	%s	指令清理	装备	%s个\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), q)
                	logFile:write(logMsg)  
@@ -1091,7 +1092,7 @@ local on_input = function(fnext, _user, input)
     if q > 0 then
         user:SendItemSpace(game.ItemSpace.INVENTORY)
         user:SendNotiPacketMessage(string.format("清理成功，%d个消耗品已清理", q), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
    		    if logFile then
                	local logMsg = string.format("%s	%d	%s	指令清理	消耗品	%s个\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), q)
                	logFile:write(logMsg)  
@@ -1113,7 +1114,7 @@ local on_input = function(fnext, _user, input)
     if q > 0 then
         user:SendItemSpace(game.ItemSpace.INVENTORY)
         user:SendNotiPacketMessage(string.format("清理成功，%d个材料已清理", q), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
    		    if logFile then
                	local logMsg = string.format("%s	%d	%s	指令清理	材料	%s个\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), q)
                	logFile:write(logMsg)  
@@ -1135,7 +1136,7 @@ local on_input = function(fnext, _user, input)
     if q > 0 then
         user:SendItemSpace(game.ItemSpace.INVENTORY)
         user:SendNotiPacketMessage(string.format("清理成功，%d个任务物品已清理", q), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
    		    if logFile then
                	local logMsg = string.format("%s	%d	%s	指令清理	任务物品	%s个\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), q)
                	logFile:write(logMsg)  
@@ -1157,7 +1158,7 @@ local on_input = function(fnext, _user, input)
     if q > 0 then
         user:SendItemSpace(game.ItemSpace.INVENTORY)
         user:SendNotiPacketMessage(string.format("清理成功，%d个副职业材料已清理", q), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
    		    if logFile then
                	local logMsg = string.format("%s	%d	%s	指令清理	副职业材料	%s个\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), q)
                	logFile:write(logMsg)  
@@ -1179,7 +1180,7 @@ local on_input = function(fnext, _user, input)
     if q > 0 then
         user:SendItemSpace(game.ItemSpace.INVENTORY)
         user:SendNotiPacketMessage(string.format("清理成功，%d个徽章已清理", q), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
    		    if logFile then
                	local logMsg = string.format("%s	%d	%s	指令清理	徽章	%s个\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), q)
                	logFile:write(logMsg)  
@@ -1201,7 +1202,7 @@ local on_input = function(fnext, _user, input)
     if q > 0 then
         user:SendItemSpace(1)
         user:SendNotiPacketMessage(string.format("清理成功，%d件装扮已清理", q), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
    		    if logFile then
                	local logMsg = string.format("%s	%d	%s	指令清理	装扮	%s件\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), q)
                	logFile:write(logMsg)  
@@ -1223,7 +1224,7 @@ local on_input = function(fnext, _user, input)
     if q > 0 then
         user:SendItemSpace(7)
         user:SendNotiPacketMessage(string.format("清理成功，%d个宠物已清理", q), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
    		    if logFile then
                	local logMsg = string.format("%s	%d	%s	指令清理	宠物	%s个\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), q)
                	logFile:write(logMsg)  
@@ -1245,7 +1246,7 @@ local on_input = function(fnext, _user, input)
     if q > 0 then
         user:SendItemSpace(game.ItemSpace.INVENTORY)
         user:SendNotiPacketMessage(string.format("清理成功，%d个宠物装备已清理", q), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
    		    if logFile then
                	local logMsg = string.format("%s	%d	%s	指令清理	宠物装备	%s个\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), q)
                	logFile:write(logMsg)  
@@ -1267,7 +1268,7 @@ local on_input = function(fnext, _user, input)
     if q > 0 then
         user:SendItemSpace(game.ItemSpace.INVENTORY)
         user:SendNotiPacketMessage(string.format("清理成功，%d个宠物消耗品已清理", q), 14)
-		local logFile = io.open("/dp2/script/rizhi.log", "a")  
+		local logFile = nil  
    		    if logFile then
                	local logMsg = string.format("%s	%d	%s	指令清理	宠物消耗品	%s个\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), q)
                	logFile:write(logMsg)  
@@ -1300,7 +1301,7 @@ local on_input = function(fnext, _user, input)
                     user:SendNotiPacketMessage("跨界失败，请确保共享仓库有空余位置", 14)
                 else
                     user:SendNotiPacketMessage(string.format("跨界成功，【%s】已转移至共享仓库", info.name), 14)
-					local logFile = io.open("/dp2/script/rizhi.log", "a")  
+					local logFile = nil  
    					    if logFile then
           			     	local logMsg = string.format("%s	%d	%s	指令跨界	%s %s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), info.name, info.id)
            			    	logFile:write(logMsg)  
@@ -1330,7 +1331,7 @@ local on_input = function(fnext, _user, input)
             user:SendNotiPacketMessage("转移失败，装备栏第一格或第二格无正确装备", 14)
         else dpx.item.inherit(user.cptr, 9, 10, mask)
 		    user:SendNotiPacketMessage(string.format("所有数据 已从: 【%s】\n       转至: 【%s】", item1.name, item2.name), 14)
-			local logFile = io.open("/dp2/script/rizhi.log", "a")  
+			local logFile = nil  
    			    if logFile then
           	     	local logMsg = string.format("%s	%d	%s	指令继承 全部属性 %s→%s %s→%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), item1.name, item2.name, item1.id, item2.id)
            	    	logFile:write(logMsg)  
@@ -1348,7 +1349,7 @@ local on_input = function(fnext, _user, input)
             user:SendNotiPacketMessage("转移失败，装备栏第一格或第二格无正确装备", 14)
         else dpx.item.inherit(user.cptr, 9, 10, mask)
 		    user:SendNotiPacketMessage(string.format("强化/增幅数据 已从: 【%s】\n       转至: 【%s】", item1.name, item2.name), 14)
-			local logFile = io.open("/dp2/script/rizhi.log", "a")  
+			local logFile = nil  
    			    if logFile then
           	     	local logMsg = string.format("%s	%d	%s	指令继承 强化/增幅 %s→%s %s→%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), item1.name, item2.name, item1.id, item2.id)
            	    	logFile:write(logMsg)   
@@ -1366,7 +1367,7 @@ local on_input = function(fnext, _user, input)
             user:SendNotiPacketMessage("转移失败，装备栏第一格或第二格无正确装备", 14)
         else dpx.item.inherit(user.cptr, 9, 10, mask)
 		    user:SendNotiPacketMessage(string.format("附魔数据 已从: 【%s】\n       转至: 【%s】", item1.name, item2.name), 14)
-			local logFile = io.open("/dp2/script/rizhi.log", "a")  
+			local logFile = nil  
    			    if logFile then
           	     	local logMsg = string.format("%s	%d	%s	指令继承 附魔 %s→%s %s→%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), item1.name, item2.name, item1.id, item2.id)
            	    	logFile:write(logMsg)  
@@ -1384,7 +1385,7 @@ local on_input = function(fnext, _user, input)
             user:SendNotiPacketMessage("转移失败，装备栏第一格或第二格无正确装备", 14)
         else dpx.item.inherit(user.cptr, 9, 10, mask)
 		    user:SendNotiPacketMessage(string.format("锻造数据 已从: 【%s】\n       转至: 【%s】", item1.name, item2.name), 14)
-			local logFile = io.open("/dp2/script/rizhi.log", "a")  
+			local logFile = nil  
    			    if logFile then
           	     	local logMsg = string.format("%s	%d	%s	指令继承 锻造 %s→%s %s→%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), item1.name, item2.name, item1.id, item2.id)
            	    	logFile:write(logMsg) 
@@ -1401,7 +1402,7 @@ local on_input = function(fnext, _user, input)
         user:ResetDimensionInout(4)
         user:ResetDimensionInout(5)
         user:SendNotiPacketMessage("异界入场次数已重置", 14)
-			local logFile = io.open("/dp2/script/rizhi.log", "a")  
+			local logFile = nil  
    			    if logFile then
           	     	local logMsg = string.format("%s	%d	%s	指令重置 异界	1次\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName())
            	    	logFile:write(logMsg)  
@@ -1418,7 +1419,7 @@ local on_input = function(fnext, _user, input)
 		if x >=0 and x <= 100 then
 			user:SetCurCharacStamina(x)
       	    user:SendNotiPacketMessage(string.format("虚弱度已设置为：【%s】", x), 14)
-        	local logFile = io.open("/dp2/script/rizhi.log", "a")  
+        	local logFile = nil  
             	if logFile then
                 	local logMsg = string.format("%s	%d	%s	指令修改 虚弱度 %s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), x)
                 	logFile:write(logMsg)  
@@ -2992,7 +2993,7 @@ item_handler[80171] = function(user, item_id)
     local cera_count = 1000
     user:ChargeCera(cera_count)
     user:SendNotiPacketMessage(string.format("已充值%d点券！", cera_count), 14)
-    local logFile = io.open("/dp2/script/rizhi.log", "a")  
+    local logFile = nil  
    		if logFile then
            	local logMsg = string.format("%s	%d	%s	道具充值	点券	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), cera_count)
            	logFile:write(logMsg)  
@@ -3004,7 +3005,7 @@ item_handler[80172] = function(user, item_id)
     local cera_count = 2000
     user:ChargeCera(cera_count)
     user:SendNotiPacketMessage(string.format("已充值%d点券！", cera_count), 14)
-    local logFile = io.open("/dp2/script/rizhi.log", "a")  
+    local logFile = nil  
    		if logFile then
            	local logMsg = string.format("%s	%d	%s	道具充值	点券	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), cera_count)
            	logFile:write(logMsg)  
@@ -3016,7 +3017,7 @@ item_handler[80173] = function(user, item_id)
     local cera_count = 5000
     user:ChargeCera(cera_count)
     user:SendNotiPacketMessage(string.format("已充值%d点券！", cera_count), 14)
-    local logFile = io.open("/dp2/script/rizhi.log", "a")  
+    local logFile = nil  
    		if logFile then
            	local logMsg = string.format("%s	%d	%s	道具充值	点券	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), cera_count)
            	logFile:write(logMsg)  
@@ -3028,7 +3029,7 @@ item_handler[80174] = function(user, item_id)
     local cera_count = 10000
     user:ChargeCera(cera_count)
     user:SendNotiPacketMessage(string.format("已充值%d点券！", cera_count), 14)
-    local logFile = io.open("/dp2/script/rizhi.log", "a")  
+    local logFile = nil  
    		if logFile then
            	local logMsg = string.format("%s	%d	%s	道具充值	点券	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), cera_count)
            	logFile:write(logMsg)  
@@ -3040,7 +3041,7 @@ item_handler[80175] = function(user, item_id)
     local cera_count = 20000
     user:ChargeCera(cera_count)
     user:SendNotiPacketMessage(string.format("已充值%d点券！", cera_count), 14)
-    local logFile = io.open("/dp2/script/rizhi.log", "a")  
+    local logFile = nil  
    		if logFile then
            	local logMsg = string.format("%s	%d	%s	道具充值	点券	%s\n", os.date("%Y-%m-%d %H:%M:%S"), user:GetAccId(), user:GetCharacName(), cera_count)
            	logFile:write(logMsg)  
