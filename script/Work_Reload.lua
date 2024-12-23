@@ -162,17 +162,19 @@ end
 
 --------------------------------------------------------------------------翻牌回城----------------------------------------------------------------------------
 local function finishBackHome(fnext, type, _party, param)
-    if type == game.GameEventType.PARTY_DUNGEON_FINISH and finishBackHomeMode ~= "0" then
+    if type == game.GameEventType.PARTY_DUNGEON_FINISH then
         fnext()
         local party = game.fac.party(_party)
         -- 当前队伍成员充值随机点券
         party:ForEachMember(function(user, pos)
-            local point = math.random(1, 100)
+            local point = math.random(100, 1000)
             user:ChargeCera(point)
             user:SendNotiPacketMessage(string.format("通关奖励%d点券", point), 14)
         end)
-        if finishBackHomeMode == "1" then
-        else
+        if finishBackHomeMode == "0" then
+        elseif finishBackHomeMode == "1" then
+            party:ReturnToVillage()
+        elseif finishBackHomeMode == "2" or finishBackHomeMode == "3" or finishBackHomeMode == "4" then
             party:ForEachMember(function(user, pos)
                 if finishBackHomeMode == "2" then
                     disjointWithNord(user)
@@ -183,8 +185,8 @@ local function finishBackHome(fnext, type, _party, param)
                 end
                 return true
             end)
+            party:ReturnToVillage()
         end
-        party:ReturnToVillage()
     end
     return fnext()
 end
